@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Animations — keyframes, initial states for GSAP-driven reveals,
+   and reduced-motion fallbacks.
+   ========================================================================== */
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 var(--accent-soft); }
+  70%  { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes scroll-line {
+  0%   { transform: translateX(-100%); }
+  50%  { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Elements revealed by ScrollTrigger start hidden only when JS has loaded
+   and motion is allowed — never hide content from users without JS. */
+html.js.motion [data-reveal] { opacity: 0; transform: translateY(24px); }
+html.js.motion [data-split-words] { visibility: hidden; }
+html.js.motion [data-hero-role],
+html.js.motion .preloader__name { opacity: 0; }
+
+/* Magnetic buttons get GPU transforms from JS; declare the hint once */
+[data-magnetic] { will-change: transform; }
+
+/* Reduced motion: strip everything non-essential */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero__pulse, .hero__scroll-line::after, .console__caret { animation: none; }
+  .ribbon__track { transform: none !important; }
+  .cursor { display: none !important; }
+}
