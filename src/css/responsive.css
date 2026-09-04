@@ -28,7 +28,7 @@
 
 /* Very large screens: cap type growth and widen gutters */
 @media (min-width: 120em) {
-  :root { --fs-display: 13rem; --container: 1680px; }
+  :root { --fs-display: 12rem; --container: 1680px; }
 }
 
 /* Short landscape viewports (phones rotated) */

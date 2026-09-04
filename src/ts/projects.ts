@@ -47,7 +47,7 @@ function renderCase(p: Project, i: number): string {
   const block = (title: string, items: string[]) => `
     <div class="case-study__block">
       <span class="label">${title}</span>
-      <ul>${items.map((x) => `<li>${x}</li>`).join('')}</ul>
+      <ul class="case-study__list">${items.map((x) => `<li>${x}</li>`).join('')}</ul>
     </div>`;
   return `
     <h2 id="case-study-title" class="case-study__title">${p.title}</h2>
@@ -60,7 +60,7 @@ function renderCase(p: Project, i: number): string {
     ${kv}
     <div class="case-study__block">
       <span class="label">Tech stack</span>
-      <ul class="project__stack" style="display:flex;flex-wrap:wrap;gap:var(--space-2)">${chips(p.stack)}</ul>
+      <ul class="project__stack">${chips(p.stack)}</ul>
     </div>
     ${block('Architecture highlights', p.architecture)}
     ${block('Key features', p.features)}

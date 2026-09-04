@@ -130,8 +130,9 @@ export function checkResume(): void {
         a.setAttribute('aria-disabled', 'true');
         a.removeAttribute('href');
         a.removeAttribute('download');
+        a.setAttribute('title', 'Résumé PDF not yet published');
         const text = a.querySelector('span:not(.mono)') ?? a.querySelector('span');
-        if (text) text.textContent = 'Résumé — coming soon';
+        if (text) text.innerHTML = `${text.textContent}<small class="resume-note">— soon</small>`;
       });
     });
 }

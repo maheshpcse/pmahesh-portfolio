@@ -22,7 +22,17 @@ function esc(s: string): string {
  * these backend/frontend repositories.
  */
 export function renderDiagram(d: Diagram, title: string): string {
-  const pos = new Map(d.nodes.map((n) => [n.id, { x: (n.x / 100) * W, y: (n.y / 100) * H }]));
+  const pad = 10;
+  const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+  const pos = new Map(
+    d.nodes.map((n) => [
+      n.id,
+      {
+        x: clamp((n.x / 100) * W, NODE_W / 2 + pad, W - NODE_W / 2 - pad),
+        y: clamp((n.y / 100) * H, NODE_H / 2 + pad, H - NODE_H / 2 - pad - 18),
+      },
+    ]),
+  );
 
   const edges = d.edges
     .map(([a, b]) => {
