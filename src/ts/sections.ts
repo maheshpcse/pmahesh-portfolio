@@ -1,32 +1,85 @@
-import { capabilities, experienceNote, GITHUB_USER, journey, pinnedRepos, RESUME_PATH } from './content';
+import { capabilities, education, experience, GITHUB_USER, pinnedRepos, RESUME_PATH } from './content';
 import { refreshIcons } from './icons';
 
-/* ---------- Experience journey ---------- */
-export function renderJourney(): void {
-  const root = document.querySelector<HTMLElement>('[data-journey]');
-  const note = document.querySelector<HTMLElement>('[data-experience-note]');
+/* ---------- Professional experience ---------- */
+function durationLabel(start: string, end: string | null): string {
+  const [sy, sm] = start.split('-').map(Number) as [number, number];
+  const now = new Date();
+  const [ey, em] = end ? (end.split('-').map(Number) as [number, number]) : [now.getFullYear(), now.getMonth() + 1];
+  const months = (ey - sy) * 12 + (em - sm) + 1;
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  return [y ? `${y} yr${y > 1 ? 's' : ''}` : '', m ? `${m} mo` : ''].filter(Boolean).join(' ');
+}
+
+export function renderExperience(): void {
+  const root = document.querySelector<HTMLElement>('[data-experience]');
   if (!root) return;
 
-  root.innerHTML = journey
+  root.innerHTML = experience
     .map(
-      (j) => `
-      <article class="journey__item" data-reveal>
-        <div class="journey__meta">
-          <span class="journey__index">${j.index}</span>
-          <span class="journey__period">${j.evidence}</span>
+      (e, i) => `
+      <article class="xp" data-reveal>
+        <div class="xp__meta">
+          <span class="xp__index">${e.index}</span>
+          <span class="xp__period mono">${e.period}</span>
+          <span class="xp__duration mono">${durationLabel(e.start, e.end)}${e.end ? '' : ' · present'}</span>
         </div>
-        <div class="journey__main">
-          <h3 class="journey__role">${j.role}</h3>
-          ${j.organisation ? `<p class="journey__org">${j.organisation}</p>` : ''}
-          <p class="copy">${j.summary}</p>
-          <ul class="journey__list">${j.points.map((p) => `<li>${p}</li>`).join('')}</ul>
+        <div class="xp__main">
+          <div class="xp__head">
+            <h3 class="xp__role">${e.role}</h3>
+            <p class="xp__company"><span>${e.company}</span><span class="mono">${e.location}</span></p>
+          </div>
+          <ul class="xp__stack" aria-label="Tech stack">${e.stack.map((s) => `<li class="chip">${s}</li>`).join('')}</ul>
+          <div class="xp__body">
+            <ul class="xp__points">
+              ${e.points.map((p, j) => `<li ${j >= 4 ? 'data-more hidden' : ''}>${p}</li>`).join('')}
+            </ul>
+            ${
+              e.points.length > 4
+                ? `<button class="xp__toggle mono" type="button" aria-expanded="false" aria-controls="xp-points-${i}" data-xp-toggle>
+                     Show all ${e.points.length} responsibilities <i data-lucide="plus" aria-hidden="true"></i>
+                   </button>`
+                : ''
+            }
+          </div>
         </div>
-        <ul class="journey__tags" aria-label="Technologies">${j.stack.map((s) => `<li class="chip">${s}</li>`).join('')}</ul>
       </article>`,
     )
     .join('');
+  root.querySelectorAll('.xp__points').forEach((ul, i) => ul.setAttribute('id', `xp-points-${i}`));
+  refreshIcons(root);
 
-  if (note && journey.some((j) => !j.organisation)) note.textContent = experienceNote;
+  root.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-xp-toggle]');
+    if (!btn) return;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    const list = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+    list?.querySelectorAll<HTMLElement>('[data-more]').forEach((li) => (li.hidden = open));
+    btn.setAttribute('aria-expanded', String(!open));
+    const total = list?.children.length ?? 0;
+    btn.innerHTML = `${open ? `Show all ${total} responsibilities` : 'Show fewer'} <i data-lucide="${open ? 'plus' : 'minus'}" aria-hidden="true"></i>`;
+    refreshIcons(btn);
+  });
+}
+
+/* ---------- Education ---------- */
+export function renderEducation(): void {
+  const root = document.querySelector<HTMLElement>('[data-education]');
+  if (!root) return;
+  root.innerHTML = education
+    .map(
+      (ed) => `
+      <article class="edu" data-reveal>
+        <span class="edu__period mono">${ed.period}</span>
+        <div>
+          <h3 class="edu__degree">${ed.degree}</h3>
+          <p class="edu__inst">${ed.institution} · ${ed.location}</p>
+        </div>
+        <span class="edu__detail mono">${ed.detail}</span>
+      </article>`,
+    )
+    .join('');
 }
 
 /* ---------- Capabilities accordion ---------- */

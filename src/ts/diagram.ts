@@ -2,7 +2,7 @@ import type { Diagram, DiagramNode } from './content';
 
 const W = 400;
 const H = 300;
-const NODE_W = 92;
+const NODE_W = 104;
 const NODE_H = 30;
 
 const kindClass: Record<NonNullable<DiagramNode['kind']>, string> = {
