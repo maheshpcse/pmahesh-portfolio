@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Base + layout primitives
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  overflow-x: clip;
+}
+
+body.is-locked { overflow: hidden; }
+
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: calc(var(--z-preloader) + 1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  transform: translateY(-200%);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow { max-width: var(--container-narrow); }
+
+/* Section rhythm */
+.section {
+  position: relative;
+  padding-block: var(--space-section);
+}
+
+.section--flush-top { padding-top: 0; }
+
+.section__head {
+  display: grid;
+  gap: var(--space-5);
+  margin-bottom: clamp(3rem, 2rem + 4vw, 6rem);
+}
+
+@media (min-width: 64em) {
+  .section__head {
+    grid-template-columns: 1fr 2fr;
+    align-items: end;
+  }
+  .section__head .eyebrow { align-self: start; }
+}
+
+.section__head h2 { max-width: 20ch; }
+
+/* Hairlines */
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}
+
+/* Background grid & noise decorations */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: clamp(48px, 6vw, 96px) clamp(48px, 6vw, 96px);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Inverse band (light section within dark theme and vice versa) */
+.band {
+  background: var(--inverse-bg);
+  color: var(--inverse-text);
+  --bg: var(--inverse-bg);
+  --text: var(--inverse-text);
+  --text-2: color-mix(in oklab, var(--inverse-text) 70%, var(--inverse-bg));
+  --text-3: color-mix(in oklab, var(--inverse-text) 50%, var(--inverse-bg));
+  --line: color-mix(in oklab, var(--inverse-text) 12%, transparent);
+  --line-strong: color-mix(in oklab, var(--inverse-text) 25%, transparent);
+  --surface: color-mix(in oklab, var(--inverse-bg) 94%, var(--inverse-text));
+  --surface-2: color-mix(in oklab, var(--inverse-bg) 90%, var(--inverse-text));
+}
+
+main { position: relative; z-index: var(--z-base); }

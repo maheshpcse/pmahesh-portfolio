@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Responsive adjustments not already handled inline in components.
+   Breakpoints: 30em (480) · 48em (768) · 64em (1024) · 90em (1440)
+   ========================================================================== */
+
+/* Small phones */
+@media (max-width: 30em) {
+  :root { --header-h: 64px; }
+  .hero__coord span:nth-child(2) { display: none; }
+  .hero__foot span:nth-child(2) { display: none; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .case-study__kv { grid-template-columns: 1fr; }
+  .stack__grid { grid-template-columns: repeat(2, 1fr); }
+  .project__title { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+  .site-footer__inner { text-align: left; }
+}
+
+/* Tablets and up: show desktop nav */
+@media (min-width: 48em) {
+  .theme-toggle__text { display: inline; }
+}
+
+@media (min-width: 64em) {
+  .site-nav { display: block; }
+  .menu-toggle { display: none; }
+  .hero__inner { padding-block: var(--space-7) var(--space-6); }
+}
+
+/* Very large screens: cap type growth and widen gutters */
+@media (min-width: 120em) {
+  :root { --fs-display: 12rem; --container: 1680px; }
+}
+
+/* Short landscape viewports (phones rotated) */
+@media (max-height: 30em) and (orientation: landscape) {
+  .hero { min-height: auto; padding-bottom: var(--space-6); }
+  .hero__name { margin-top: var(--space-6); }
+}
+
+/* Print */
+@media print {
+  .site-header, .preloader, .noise, .cursor, .ribbon, .hero__glow, .bg-grid, .menu-toggle, .theme-toggle { display: none !important; }
+  body { background: #fff; color: #000; }
+  a::after { content: ' (' attr(href) ')'; font-size: 0.8em; }
+}

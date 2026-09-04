@@ -1,0 +1,13 @@
+/* Tailwind v4: utilities only. Preflight is skipped so the hand-written base
+   layer below owns resets and typography; Tailwind provides responsive layout
+   helpers used in TypeScript-rendered markup (flex/grid/gap/etc.). */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@import './variables.css' layer(base);
+@import './typography.css' layer(base);
+@import './layout.css' layer(base);
+@import './components.css' layer(components);
+@import './animations.css' layer(components);
+@import './responsive.css' layer(components);
