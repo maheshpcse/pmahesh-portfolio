@@ -18,11 +18,23 @@ export interface Diagram {
   edges: Array<[string, string]>;
 }
 
+export interface LiveLink {
+  url: string;
+  /** Short label for the button, e.g. "Open app" or "API health". */
+  label: string;
+  /** Hosting platform, shown as metadata. */
+  host: string;
+  /** ISO date the URL was last verified to respond. */
+  verified: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
   /** Frontend / Backend within its application group. */
   layer: 'Frontend' | 'Backend';
+  /** Verified production deployment, if any. */
+  live?: LiveLink;
   tagline: string;
   description: string;
   purpose: string;
@@ -40,6 +52,10 @@ export interface ProjectGroup {
   slug: string;
   title: string;
   summary: string;
+  /** Verified production URL of the application's home page. */
+  live: LiveLink;
+  /** Home-page screenshot (in public/assets/images/projects). */
+  screenshot: { src: string; srcSmall: string; alt: string; width: number; height: number };
   projects: Project[];
 }
 
@@ -52,11 +68,20 @@ export const projectGroups: ProjectGroup[] = [
     slug: 'chat-application',
     title: 'Chat Application',
     summary: 'Real-time messaging platform: an Angular client over a microservice Node.js backend with Socket.IO, Redis pub/sub and dual databases.',
+    live: { url: 'https://maheshpcse.github.io/chat-app/', label: 'Open live app', host: 'GitHub Pages', verified: '2026-09-04' },
+    screenshot: {
+      src: './assets/images/projects/chat-app-home.webp',
+      srcSmall: './assets/images/projects/chat-app-home-800.webp',
+      alt: 'Chat App home page: "Talk freely. Connect instantly." headline with sample conversation bubbles and Get Started button',
+      width: 1600,
+      height: 757,
+    },
     projects: [
       {
         slug: 'chat-app',
         title: 'Chat App',
         layer: 'Frontend',
+        live: { url: 'https://maheshpcse.github.io/chat-app/', label: 'Open live app', host: 'GitHub Pages', verified: '2026-09-04' },
         tagline: 'Angular real-time chat client',
         description:
           'Angular 10 client for the chat system: private and group messaging over Socket.IO with presence, typing indicators, unread badges and notifications.',
@@ -78,7 +103,7 @@ export const projectGroups: ProjectGroup[] = [
           'User search with autocomplete and profile management',
         ],
         repo: 'https://github.com/maheshpcse/chat-app',
-        status: 'Public repository · no verified live deployment',
+        status: 'Live · GitHub Pages',
         language: 'TypeScript',
         diagram: {
           nodes: [
@@ -106,6 +131,7 @@ export const projectGroups: ProjectGroup[] = [
         slug: 'chat-system',
         title: 'Chat System',
         layer: 'Backend',
+        live: { url: 'https://chat-system-production-83db.up.railway.app/api/v1/health', label: 'API health', host: 'Railway', verified: '2026-09-04' },
         tagline: 'Microservice real-time messaging backend',
         description:
           'Dual-service Node.js backend for real-time chat: a primary service on MySQL with Socket.IO and Redis pub/sub, and a separate analytics service on MongoDB.',
@@ -130,7 +156,7 @@ export const projectGroups: ProjectGroup[] = [
           'Graceful shutdown and unhandled-rejection handling',
         ],
         repo: 'https://github.com/maheshpcse/chat-system',
-        status: 'Public repository · no verified live deployment',
+        status: 'Live · Railway',
         language: 'JavaScript',
         diagram: {
           nodes: [
@@ -158,11 +184,20 @@ export const projectGroups: ProjectGroup[] = [
     slug: 'novabank-application',
     title: 'NovaBank Application',
     summary: 'Fintech platform: an Angular banking interface over a secure Node.js API with role-based access, encrypted card data and money controls.',
+    live: { url: 'https://maheshpcse.github.io/banking-system/', label: 'Open live app', host: 'GitHub Pages', verified: '2026-09-04' },
+    screenshot: {
+      src: './assets/images/projects/novabank-home.webp',
+      srcSmall: './assets/images/projects/novabank-home-800.webp',
+      alt: 'NovaBank home page: "Banking that feels clear the moment you arrive." headline with Login and Signup buttons',
+      width: 1600,
+      height: 757,
+    },
     projects: [
       {
         slug: 'banking-system',
         title: 'NovaBank UI',
         layer: 'Frontend',
+        live: { url: 'https://maheshpcse.github.io/banking-system/', label: 'Open live app', host: 'GitHub Pages', verified: '2026-09-04' },
         tagline: 'Angular fintech frontend',
         description:
           'Angular 14 client for the banking API: dashboards with limit meters, transfers with recipient autocomplete, staff approvals and a billing interface.',
@@ -185,7 +220,7 @@ export const projectGroups: ProjectGroup[] = [
           'Manager analytics and billing system UI',
         ],
         repo: 'https://github.com/maheshpcse/banking-system',
-        status: 'Public repository · no verified live deployment',
+        status: 'Live · GitHub Pages',
         language: 'TypeScript',
         diagram: {
           nodes: [
@@ -211,6 +246,7 @@ export const projectGroups: ProjectGroup[] = [
         slug: 'banking-system-server',
         title: 'NovaBank API',
         layer: 'Backend',
+        live: { url: 'https://banking-system-production-d9aa.up.railway.app/api/health', label: 'API health', host: 'Railway', verified: '2026-09-04' },
         tagline: 'Fintech backend with money controls',
         description:
           'Banking system API covering accounts, transfers, role-based access, encrypted card data, channel-level money controls and a billing module.',
@@ -234,7 +270,7 @@ export const projectGroups: ProjectGroup[] = [
           'Staff onboarding with Super Admin approval',
         ],
         repo: 'https://github.com/maheshpcse/banking-system-server',
-        status: 'Public repository · no verified live deployment',
+        status: 'Live · Railway',
         language: 'JavaScript',
         diagram: {
           nodes: [
