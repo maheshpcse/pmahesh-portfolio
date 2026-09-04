@@ -370,7 +370,14 @@
 .hero__scroll-line { width: 40px; height: 1px; background: var(--text-3); overflow: hidden; position: relative; }
 .hero__scroll-line::after { content: ''; position: absolute; inset: 0; background: var(--accent); transform: translateX(-100%); animation: scroll-line 2.2s var(--ease-in-out) infinite; }
 
-@media (min-width: 64em) {
+@media (min-width: 64em) and (max-width: 79.99em) {
+  .hero__grid { grid-template-columns: 1.7fr 1fr; align-items: end; column-gap: var(--space-8); }
+  .hero__role { grid-column: 1; grid-row: 1; }
+  .hero__statement { grid-column: 1; grid-row: 2; }
+  .hero__aside { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+@media (min-width: 80em) {
   .hero__grid { grid-template-columns: 0.9fr 2fr 1fr; align-items: end; }
   .hero__role { align-self: start; }
 }

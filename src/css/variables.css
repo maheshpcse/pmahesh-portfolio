@@ -124,7 +124,7 @@
   --accent-hover: #b93705;
   --accent-ink: #ffffff;
   --accent-soft: rgba(217, 67, 10, 0.1);
-  --glow: rgba(217, 67, 10, 0.1);
+  --glow: rgba(217, 67, 10, 0.07);
 
   --grid-line: rgba(11, 12, 15, 0.06);
   --noise-opacity: 0.06;

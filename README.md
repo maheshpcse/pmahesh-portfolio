@@ -26,7 +26,7 @@ Boundaries are explicit: Tailwind = layout utilities, Bootstrap = behaviour of t
 ├── public/
 │   ├── assets/icons/          # favicon + touch icon (SVG)
 │   ├── assets/images/         # Open Graph card
-│   ├── assets/resume/         # place the résumé PDF here (see README inside)
+│   ├── assets/resume/         # place the résumé PDF here (exact filename below)
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── src/
