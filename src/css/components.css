@@ -451,7 +451,7 @@
 }
 
 /* ---------- Selected work ---------- */
-.work { --preview-w: 340px; }
+.work { --preview-w: 400px; }
 .work__list { border-top: 1px solid var(--line); }
 .project {
   position: relative;
@@ -783,7 +783,7 @@
 .dg-grid { stroke: var(--grid-line); stroke-width: 1; }
 .dg-edge { fill: none; stroke: var(--line-strong); stroke-width: 1; stroke-dasharray: 3 3; }
 .dg-node rect { fill: var(--bg); stroke: var(--line-strong); stroke-width: 1; }
-.dg-node text { fill: var(--text); font-size: 9.5px; letter-spacing: 0.02em; }
+.dg-node text { fill: var(--text); font-size: 10.5px; letter-spacing: 0.02em; }
 .dg-node--client rect { stroke: var(--text-3); }
 .dg-node--service rect { stroke: var(--accent); }
 .dg-node--data rect { fill: var(--surface-2); }

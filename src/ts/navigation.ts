@@ -56,12 +56,11 @@ export function initNavigation({ lenis }: NavOptions): void {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
           const id = `#${entry.target.id}`;
           links.forEach((a) => {
-            const active = a.getAttribute('href') === id;
-            a.classList.toggle('is-active', active);
-            if (active) a.setAttribute('aria-current', 'location');
+            if (a.getAttribute('href') !== id) return;
+            a.classList.toggle('is-active', entry.isIntersecting);
+            if (entry.isIntersecting) a.setAttribute('aria-current', 'location');
             else a.removeAttribute('aria-current');
           });
         });

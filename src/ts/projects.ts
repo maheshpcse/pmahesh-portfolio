@@ -133,8 +133,11 @@ function initPreview(list: HTMLElement): void {
   list.addEventListener(
     'pointermove',
     (e) => {
-      xTo(e.clientX + 40);
-      yTo(e.clientY);
+      // Sit to the right of the pointer, flipping left near the viewport edge.
+      const half = preview.offsetWidth / 2;
+      const right = e.clientX + half + 48;
+      xTo(right + half + 24 > innerWidth ? e.clientX - half - 48 : right);
+      yTo(e.clientY - 24);
       rotTo(gsap.utils.clamp(-6, 6, (e.clientX - lastX) * 0.4));
       lastX = e.clientX;
     },

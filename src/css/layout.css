@@ -118,6 +118,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .band {
   background: var(--inverse-bg);
   color: var(--inverse-text);
+  --bg: var(--inverse-bg);
   --text: var(--inverse-text);
   --text-2: color-mix(in oklab, var(--inverse-text) 70%, var(--inverse-bg));
   --text-3: color-mix(in oklab, var(--inverse-text) 50%, var(--inverse-bg));
