@@ -83,9 +83,21 @@ Update the canonical URL in `index.html`, `public/robots.txt` and `public/sitema
 - Custom cursor and hover previews only on `(hover: hover) and (pointer: fine)`.
 - Transform/opacity-only animation, passive listeners, `IntersectionObserver` for reveals and lazy GitHub fetch, minimal font weights with `display=swap`, deferred module scripts, vendor chunks split (`motion`, `ui`).
 
-## Deploy
+## Deploy — GitHub Pages
 
-The build is relative-path (`base: './'`), so `dist/` can be served from GitHub Pages, Netlify, Vercel, S3 or any static host without changes.
+Deployment is automated by `.github/workflows/deploy.yml`: every push to `main` type-checks, builds, and publishes `dist/` to GitHub Pages via the official `actions/deploy-pages` flow (no `gh-pages` branch, no committed build output).
+
+One-time setup:
+
+1. In the repository go to **Settings → Pages** and set **Source** to **GitHub Actions**.
+2. Merge to `main` (or run the workflow manually from the **Actions** tab). The site publishes at `https://maheshpcse.github.io/pmahesh-portfolio/`.
+
+Notes:
+
+- `public/.nojekyll` disables Jekyll processing so files and folders are served verbatim.
+- `public/404.html` is served by Pages for unknown paths and links back to the site root.
+- The build uses a relative `base: './'`, so the same `dist/` also works on a custom domain, Netlify, Vercel or S3 without changes. For a custom domain add a `public/CNAME` file containing the domain and update the canonical URL in `index.html`, `public/robots.txt` and `public/sitemap.xml`.
+- Node version is pinned in `.nvmrc` (22) and in the workflow.
 
 ## License
 
