@@ -498,7 +498,27 @@
 .project-group__index { color: var(--text-3); }
 .project-group__title { font-size: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem); letter-spacing: -0.03em; line-height: 1; margin-top: var(--space-2); }
 .project-group__summary { color: var(--text-2); line-height: var(--lh-relaxed); max-width: 60ch; margin-top: var(--space-3); }
+.project-group__intro { display: grid; gap: 0; align-content: start; }
+.project-group__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); margin-top: var(--space-5); }
+.project-group__host { color: var(--text-3); overflow-wrap: anywhere; }
+.project-group__host a { color: var(--text-2); border-bottom: 1px solid var(--line-strong); }
+.project-group__host a:hover { color: var(--accent); border-color: var(--accent); }
+.project-group__shot {
+  display: block;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  transition: transform var(--dur-base) var(--ease-out), border-color var(--dur-base);
+}
+.project-group__shot img { width: 100%; height: auto; aspect-ratio: 1600 / 757; object-fit: cover; transition: transform var(--dur-slow) var(--ease-expo); }
+.project-group__shot:hover { border-color: var(--accent); }
+.project-group__shot:hover img { transform: scale(1.02); }
 .project-group__rows { display: grid; }
+
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); flex: none; }
+.project__link--live { border-color: var(--text); color: var(--text); }
 
 .project {
   position: relative;
@@ -567,6 +587,8 @@
   }
   .project:hover::after, .project:focus-within::after { transform: scaleX(1); }
   .project-group__head { grid-template-columns: 64px 1fr; column-gap: var(--space-5); align-items: start; }
+  /* Desktop: the sticky preview panel carries the screenshot */
+  .project-group__shot { display: none; }
 }
 
 /* Sticky architecture preview (desktop) */
@@ -588,6 +610,8 @@
     box-shadow: var(--shadow-1);
   }
   .work__preview-figure svg { width: 100%; height: 100%; }
+  .work__preview-figure img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .work__preview-figure.is-shot { aspect-ratio: 1600 / 757; }
   .work__preview-title { font-family: var(--font-display); font-size: var(--fs-lg); font-weight: var(--fw-medium); letter-spacing: -0.01em; }
   .work__preview-meta { color: var(--text-3); }
 }
