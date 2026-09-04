@@ -14,7 +14,7 @@ Built deliberately without a frontend framework: semantic HTML, a token-driven C
 | Interactive components | Bootstrap 5 JS only — `Offcanvas` | Focus trap, ESC, backdrop and ARIA for the mobile menu and case-study drawer; styled by the design system, no Bootstrap CSS |
 | DOM helpers | jQuery 4 | Delegated events and DOM swaps in the stack explorer only |
 | Motion | GSAP 3 (ScrollTrigger, SplitText), Lenis | Intro sequence, masked reveals, scroll triggers, smooth scrolling |
-| Icons | Lucide | Tree-shaken to the handful of icons used |
+| Icons | Lucide, Simple Icons | Lucide for UI glyphs; Simple Icons brand marks (monochrome, brand-tinted on hover) in the stack explorer |
 
 Boundaries are explicit: Tailwind = layout utilities, Bootstrap = behaviour of two overlays, jQuery = one module, custom CSS = everything visual.
 
@@ -45,7 +45,8 @@ Boundaries are explicit: Tailwind = layout utilities, Bootstrap = behaviour of t
 │       ├── navigation.ts      # header, active section, anchors, offcanvas
 │       ├── projects.ts        # project rows, hover preview, case-study drawer
 │       ├── stack.ts           # tech explorer (tabs) + ribbon
-│       ├── sections.ts        # experience, capabilities, GitHub, résumé, clock
+│       ├── sections.ts        # experience, education, capabilities, GitHub, résumé, clock
+│       ├── techicons.ts       # Simple Icons / Lucide registry for the stack explorer
 │       ├── diagram.ts         # inline SVG architecture sketches
 │       ├── cursor.ts          # custom cursor (fine pointers only)
 │       ├── theme.ts           # dark / light toggle + persistence
@@ -66,12 +67,12 @@ npm run preview    # serve dist/
 
 ## Content and accuracy
 
-All professional facts come from the public GitHub profile (`github.com/maheshpcse`) and its profile README. Nothing is invented:
+All professional facts come from the résumé and the public GitHub profile (`github.com/maheshpcse`). Nothing is invented:
 
-- **Experience** is presented as domain chapters. Employer names and dates are *not* shown because the résumé PDF was unavailable at build time; fill `organisation` in `src/ts/content.ts` once verified.
-- **Projects** are the four most complete public repositories. No live URLs are claimed — none are verified.
+- **Experience and education** are taken from the résumé (`public/assets/resume/`): employers, roles, locations, periods and responsibilities. Contact phone number is intentionally not published.
+- **Projects** are the two most complete applications (Chat Application, NovaBank Application), each shown as its Angular frontend and Node.js backend repository. No live URLs are claimed — none are verified.
 - **GitHub stats** show a static snapshot and upgrade to the live public-repo count at runtime when `api.github.com` is reachable.
-- **Résumé** links target `public/assets/resume/Mahesh-FullStack-JavaScript-Developer-6.9yrs.pdf` and disable themselves with a "coming soon" label while the file is absent.
+- **Résumé** links target `public/assets/resume/Mahesh-FullStack-JavaScript-Developer-6.9yrs.pdf` and would disable themselves with a "soon" label if the file were absent.
 
 Update the canonical URL in `index.html`, `public/robots.txt` and `public/sitemap.xml` if the site is deployed somewhere other than `https://maheshpcse.github.io/pmahesh-portfolio/`.
 

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { gsap } from 'gsap';
 import { ribbonItems, stackGroups } from './content';
+import { techIcon } from './techicons';
 
 /**
  * Technical arsenal: an accessible tablist (WAI-ARIA pattern) driving a grid
@@ -37,7 +38,15 @@ export function initStack(): void {
           <p>${g.description}</p>
         </div>
         <ul class="stack__grid" aria-label="${g.label} technologies">
-          ${g.items.map((it) => `<li class="stack__cell"><span>${it.name}</span><small>${it.note}</small></li>`).join('')}
+          ${g.items
+            .map(
+              (it) => `<li class="stack__cell">
+                <span class="stack__cell-icon">${techIcon(it.icon)}</span>
+                <span class="stack__cell-name">${it.name}</span>
+                <small>${it.note}</small>
+              </li>`,
+            )
+            .join('')}
         </ul>`);
 
     if (!reduced) {

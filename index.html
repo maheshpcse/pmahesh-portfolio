@@ -43,9 +43,11 @@
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     />
 
-    <!-- Apply the persisted theme before first paint to avoid a flash. -->
+    <!-- Apply the persisted theme before first paint to avoid a flash, and
+         take over scroll restoration so every load starts at the top. -->
     <script>
       (function () {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         try {
           var t = localStorage.getItem('mp-theme');
           if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -257,12 +259,18 @@
         <div class="container">
           <div class="section__head">
             <p class="eyebrow"><b>01</b> Professional experience</p>
-            <h2 id="experience-title" data-split-words>An engineering journey across product surfaces and service boundaries.</h2>
+            <h2 id="experience-title" data-split-words>Six-plus years shipping fintech and MEAN-stack products, from API to interface.</h2>
           </div>
-          <div class="journey" data-journey>
-            <!-- Rendered from src/ts/content.ts -->
+          <div class="xp-list" data-experience>
+            <!-- Rendered from src/ts/content.ts (résumé) -->
           </div>
-          <p class="experience__note mono" data-experience-note></p>
+
+          <div class="education" aria-labelledby="education-title">
+            <p class="eyebrow" id="education-title"><b>01.1</b> Education</p>
+            <div class="edu-list" data-education>
+              <!-- Rendered from src/ts/content.ts (résumé) -->
+            </div>
+          </div>
         </div>
       </section>
 
@@ -270,37 +278,29 @@
       <section class="section work band" id="work" aria-labelledby="work-title">
         <div class="container">
           <div class="section__head">
-            <p class="eyebrow"><b>02</b> Selected work</p>
-            <h2 id="work-title" data-split-words>Four public builds chosen for architecture, completeness and full-stack range.</h2>
+            <p class="eyebrow"><b>02</b> Selected work · hands-on projects</p>
+            <h2 id="work-title" data-split-words>Two full-stack applications, each split into an Angular client and a Node.js backend.</h2>
           </div>
 
-          <div class="work__list" data-project-list>
-            <!-- Rendered from src/ts/content.ts -->
-          </div>
+          <div class="work__layout">
+            <div class="work__list" data-project-list>
+              <!-- Rendered from src/ts/content.ts -->
+            </div>
 
-          <div class="work__preview" data-project-preview aria-hidden="true">
-            <div class="work__preview-inner" data-project-preview-inner></div>
+            <aside class="work__preview" data-project-preview aria-label="Architecture preview of the highlighted project">
+              <div class="work__preview-figure" data-preview-figure></div>
+              <p class="work__preview-title" data-preview-title></p>
+              <p class="work__preview-meta mono" data-preview-meta></p>
+            </aside>
           </div>
 
           <p class="work__footnote mono">
-            All projects are public repositories. Live deployments are listed only when verified — none are claimed here.
+            Personal, public repositories built as hands-on engineering practice. Live deployments are listed only when
+            verified — none are claimed here.
             <a href="https://github.com/maheshpcse?tab=repositories" target="_blank" rel="noopener noreferrer">Browse all repositories →</a>
           </p>
         </div>
       </section>
-
-      <!-- Case-study drawer (Bootstrap Offcanvas) -->
-      <div class="offcanvas offcanvas-end case-study" tabindex="-1" id="case-study" aria-labelledby="case-study-title" data-lenis-prevent>
-        <div class="case-study__head">
-          <span class="mono" data-case-index>01</span>
-          <button type="button" class="case-study__close" data-bs-dismiss="offcanvas" aria-label="Close case study">
-            <i data-lucide="x" aria-hidden="true"></i>
-          </button>
-        </div>
-        <div class="case-study__body" data-case-body>
-          <h2 id="case-study-title" class="case-study__title" data-case-title></h2>
-        </div>
-      </div>
 
       <!-- 07 — Technical Arsenal -->
       <section class="section stack" id="stack" aria-labelledby="stack-title">
@@ -446,6 +446,20 @@ $ <span class="console__caret" aria-hidden="true"></span></code></pre>
         </div>
       </section>
     </main>
+
+    <!-- Case-study drawer (Bootstrap Offcanvas). Lives outside <main> so it is
+         not trapped in main's stacking context and layers above the header. -->
+    <div class="offcanvas offcanvas-end case-study" tabindex="-1" id="case-study" aria-labelledby="case-study-title" data-lenis-prevent>
+      <div class="case-study__head">
+        <span class="mono" data-case-index>01</span>
+        <button type="button" class="case-study__close" data-bs-dismiss="offcanvas" aria-label="Close case study">
+          <i data-lucide="x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="case-study__body" data-case-body>
+        <h2 id="case-study-title" class="case-study__title"></h2>
+      </div>
+    </div>
 
     <!-- 13 — Footer -->
     <footer class="site-footer">
