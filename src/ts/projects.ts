@@ -1,25 +1,27 @@
 import Offcanvas from 'bootstrap/js/dist/offcanvas';
 import { gsap } from 'gsap';
-import { projects, type Project } from './content';
+import { projectGroups, projects, type Project } from './content';
 import { renderDiagram } from './diagram';
 import { refreshIcons } from './icons';
 
 const ICON_ARROW = '<i data-lucide="arrow-up-right" aria-hidden="true"></i>';
 const ICON_PLUS = '<i data-lucide="plus" aria-hidden="true"></i>';
 
-function chips(items: string[]): string {
-  return items.map((s) => `<li class="chip">${s}</li>`).join('');
-}
+const pad = (n: number) => String(n).padStart(2, '0');
+const chips = (items: string[]) => items.map((s) => `<li class="chip">${s}</li>`).join('');
 
-function renderRow(p: Project, i: number): string {
-  const n = String(i + 1).padStart(2, '0');
+function renderRow(p: Project, gi: number, pi: number): string {
   return `
-    <article class="project" data-project="${p.slug}" data-cursor="View">
-      <span class="project__index">${n} / ${String(projects.length).padStart(2, '0')}</span>
-      <div class="project__title-wrap">
-        <h3 class="project__title">${p.title}</h3>
+    <article class="project" data-project="${p.slug}" tabindex="-1">
+      <span class="project__index mono">${pad(gi + 1)}.${pi + 1}</span>
+      <div class="project__body">
+        <div class="project__title-wrap">
+          <h4 class="project__title">${p.title}</h4>
+          <span class="project__layer">${p.layer}</span>
+        </div>
         <p class="label">${p.tagline}</p>
         <p class="project__desc">${p.description}</p>
+        <ul class="project__stack" aria-label="Technology stack">${chips(p.stack.slice(0, 5))}</ul>
         <div class="project__actions">
           <button class="project__link project__link--case" type="button" data-case-open="${p.slug}" aria-haspopup="dialog" aria-controls="case-study">
             Case study ${ICON_PLUS}
@@ -27,23 +29,34 @@ function renderRow(p: Project, i: number): string {
           <a class="project__link" href="${p.repo}" target="_blank" rel="noopener noreferrer">
             Repository ${ICON_ARROW}
           </a>
+          <span class="project__status">${p.status.split(' · ')[0]}</span>
         </div>
-      </div>
-      <div class="project__meta">
-        <ul class="project__stack" aria-label="Technology stack">${chips(p.stack.slice(0, 5))}</ul>
-        <span class="project__status">${p.status.split(' · ')[0]}</span>
       </div>
     </article>`;
 }
 
+function renderGroups(): string {
+  return projectGroups
+    .map(
+      (g, gi) => `
+      <section class="project-group" aria-labelledby="group-${g.slug}">
+        <header class="project-group__head">
+          <span class="project-group__index mono">${pad(gi + 1)} / ${pad(projectGroups.length)}</span>
+          <div>
+            <p class="label">Project</p>
+            <h3 class="project-group__title" id="group-${g.slug}">${g.title}</h3>
+            <p class="project-group__summary">${g.summary}</p>
+          </div>
+        </header>
+        <div class="project-group__rows">
+          ${g.projects.map((p, pi) => renderRow(p, gi, pi)).join('')}
+        </div>
+      </section>`,
+    )
+    .join('');
+}
+
 function renderCase(p: Project, i: number): string {
-  const kv = `
-    <dl class="case-study__kv">
-      <div><dt class="label">Role</dt><dd>${p.role}</dd></div>
-      <div><dt class="label">Primary language</dt><dd>${p.language}</dd></div>
-      <div><dt class="label">Status</dt><dd>${p.status}</dd></div>
-      <div><dt class="label">Index</dt><dd>${String(i + 1).padStart(2, '0')} of ${String(projects.length).padStart(2, '0')}</dd></div>
-    </dl>`;
   const block = (title: string, items: string[]) => `
     <div class="case-study__block">
       <span class="label">${title}</span>
@@ -57,7 +70,12 @@ function renderCase(p: Project, i: number): string {
       <span class="label">Purpose</span>
       <p>${p.purpose}</p>
     </div>
-    ${kv}
+    <dl class="case-study__kv">
+      <div><dt class="label">Role</dt><dd>${p.role}</dd></div>
+      <div><dt class="label">Layer</dt><dd>${p.layer} · ${p.language}</dd></div>
+      <div><dt class="label">Status</dt><dd>${p.status}</dd></div>
+      <div><dt class="label">Index</dt><dd>${pad(i + 1)} of ${pad(projects.length)}</dd></div>
+    </dl>
     <div class="case-study__block">
       <span class="label">Tech stack</span>
       <ul class="project__stack">${chips(p.stack)}</ul>
@@ -78,7 +96,7 @@ export function initProjects(): void {
   const index = drawer?.querySelector<HTMLElement>('[data-case-index]');
   if (!list || !drawer || !body || !index) return;
 
-  list.innerHTML = projects.map(renderRow).join('');
+  list.innerHTML = renderGroups();
   refreshIcons(list);
 
   // Case-study drawer (Bootstrap Offcanvas handles focus trap, ESC, backdrop)
@@ -92,56 +110,62 @@ export function initProjects(): void {
     const p = projects[i];
     if (!p) return;
     body.innerHTML = renderCase(p, i);
-    index.textContent = `${String(i + 1).padStart(2, '0')} — Case study`;
+    index.textContent = `${pad(i + 1)} — Case study`;
     refreshIcons(body);
     opener = btn;
     oc.show();
   });
   drawer.addEventListener('hidden.bs.offcanvas', () => opener?.focus());
 
-  initPreview(list);
+  initPreviewPanel(list);
 }
 
-/** Cursor-following architecture preview on desktop hover. */
-function initPreview(list: HTMLElement): void {
-  const preview = document.querySelector<HTMLElement>('[data-project-preview]');
-  const inner = preview?.querySelector<HTMLElement>('[data-project-preview-inner]');
-  const fine = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 64em)').matches;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!preview || !inner || !fine || reduced) return;
+/**
+ * Sticky preview panel (desktop): shows the architecture sketch of the row
+ * under the pointer or keyboard focus. Anchored to the layout rather than the
+ * cursor so it is deterministic across scroll libraries and viewports.
+ */
+function initPreviewPanel(list: HTMLElement): void {
+  const panel = document.querySelector<HTMLElement>('[data-project-preview]');
+  const figure = panel?.querySelector<HTMLElement>('[data-preview-figure]');
+  const title = panel?.querySelector<HTMLElement>('[data-preview-title]');
+  const meta = panel?.querySelector<HTMLElement>('[data-preview-meta]');
+  if (!panel || !figure || !title || !meta) return;
 
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cache = new Map<string, string>();
-  const xTo = gsap.quickTo(preview, 'x', { duration: 0.5, ease: 'power3.out' });
-  const yTo = gsap.quickTo(preview, 'y', { duration: 0.5, ease: 'power3.out' });
-  const rotTo = gsap.quickTo(preview, 'rotation', { duration: 0.6, ease: 'power3.out' });
-  let lastX = 0;
+  let current = '';
 
   const show = (slug: string) => {
+    if (slug === current) return;
     const p = projects.find((x) => x.slug === slug);
     if (!p) return;
+    current = slug;
     if (!cache.has(slug)) cache.set(slug, renderDiagram(p.diagram, p.title));
-    inner.innerHTML = cache.get(slug)!;
-    gsap.to(preview, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power3.out', overwrite: true });
-  };
-  const hide = () => gsap.to(preview, { autoAlpha: 0, scale: 0.92, duration: 0.3, ease: 'power3.in', overwrite: true });
 
+    const swap = () => {
+      figure.innerHTML = cache.get(slug)!;
+      title.textContent = p.title;
+      meta.textContent = `${p.layer} · ${p.language} · ${p.stack.slice(0, 3).join(' / ')}`;
+    };
+    if (reduced) return swap();
+    gsap
+      .timeline()
+      .to(panel.children, { autoAlpha: 0, y: 8, duration: 0.18, ease: 'power2.in', stagger: 0.02 })
+      .add(swap)
+      .to(panel.children, { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power3.out', stagger: 0.04, clearProps: 'transform' });
+  };
+
+  const first = projects[0];
+  if (first) show(first.slug);
+
+  const rowSlug = (t: EventTarget | null) => (t as HTMLElement | null)?.closest<HTMLElement>('.project')?.dataset.project;
   list.addEventListener('pointerover', (e) => {
-    const row = (e.target as HTMLElement).closest<HTMLElement>('.project');
-    if (row?.dataset.project) show(row.dataset.project);
+    const s = rowSlug(e.target);
+    if (s) show(s);
   });
-  list.addEventListener('pointerleave', hide);
-  list.addEventListener(
-    'pointermove',
-    (e) => {
-      // Sit to the right of the pointer, flipping left near the viewport edge.
-      const half = preview.offsetWidth / 2;
-      const right = e.clientX + half + 48;
-      xTo(right + half + 24 > innerWidth ? e.clientX - half - 48 : right);
-      yTo(e.clientY - 24);
-      rotTo(gsap.utils.clamp(-6, 6, (e.clientX - lastX) * 0.4));
-      lastX = e.clientX;
-    },
-    { passive: true },
-  );
-  gsap.set(preview, { autoAlpha: 0, scale: 0.92 });
+  list.addEventListener('focusin', (e) => {
+    const s = rowSlug(e.target);
+    if (s) show(s);
+  });
 }

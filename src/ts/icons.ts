@@ -1,7 +1,7 @@
-import { createIcons, ArrowDownRight, ArrowUpRight, Download, FileText, Plus, X } from 'lucide';
+import { createIcons, ArrowDownRight, ArrowUpRight, Download, FileText, Minus, Plus, X } from 'lucide';
 
 // Only the icons actually used are bundled (tree-shaken).
-const icons = { ArrowDownRight, ArrowUpRight, Download, FileText, Plus, X };
+const icons = { ArrowDownRight, ArrowUpRight, Download, FileText, Minus, Plus, X };
 
 /** Replace `<i data-lucide>` placeholders within `root` with inline SVGs. */
 export function refreshIcons(root: HTMLElement | Document = document): void {
