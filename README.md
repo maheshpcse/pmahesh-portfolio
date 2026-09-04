@@ -25,7 +25,7 @@ Boundaries are explicit: Tailwind = layout utilities, Bootstrap = behaviour of t
 ├── index.html                 # single page, semantic sections
 ├── public/
 │   ├── assets/icons/          # favicon + touch icon (SVG)
-│   ├── assets/images/         # Open Graph card
+│   ├── assets/images/         # Open Graph card, project home-page screenshots (WebP)
 │   ├── assets/resume/         # place the résumé PDF here (exact filename below)
 │   ├── robots.txt
 │   └── sitemap.xml
@@ -70,7 +70,7 @@ npm run preview    # serve dist/
 All professional facts come from the résumé and the public GitHub profile (`github.com/maheshpcse`). Nothing is invented:
 
 - **Experience and education** are taken from the résumé (`public/assets/resume/`): employers, roles, locations, periods and responsibilities. Contact phone number is intentionally not published.
-- **Projects** are the two most complete applications (Chat Application, NovaBank Application), each shown as its Angular frontend and Node.js backend repository. No live URLs are claimed — none are verified.
+- **Projects** are the two most complete applications (Chat Application, NovaBank Application), each shown as its Angular frontend and Node.js backend repository. Live URLs (frontends on GitHub Pages, APIs on Railway) were verified to respond on the date recorded in `live.verified` in `src/ts/content.ts`; re-verify and update that date when redeploying. Home-page screenshots live in `public/assets/images/projects/` as WebP.
 - **GitHub stats** show a static snapshot and upgrade to the live public-repo count at runtime when `api.github.com` is reachable.
 - **Résumé** links target `public/assets/resume/Mahesh-FullStack-JavaScript-Developer-6.9yrs.pdf` and would disable themselves with a "soon" label if the file were absent.
 
