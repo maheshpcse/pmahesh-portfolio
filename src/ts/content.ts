@@ -339,9 +339,9 @@ export const experience: ExperienceItem[] = [
     company: 'Akrivia Automation Pvt Ltd',
     role: 'MEAN Stack Developer',
     location: 'Visakhapatnam, India',
-    period: 'Aug 2019 — May 2022',
+    period: 'Aug 2019 — Apr 2022',
     start: '2019-08',
-    end: '2022-05',
+    end: '2022-04',
     stack: ['Angular', 'Node.js', 'TypeScript', 'MongoDB', 'WebSockets', 'AWS', 'RabbitMQ', 'SQL'],
     points: [
       'Developed and maintained full-stack web applications using MEAN stack technologies.',
